@@ -34,6 +34,16 @@ Navigate to `Interface Options` -> `I2C` -> `Enable` -> `YES`.
 i2cdetect -y 1
 ```
 It will shows an address: `0x3c`
+
+### Installation and Upgrade 
+* Adafruit_SSD1306 and Adafruit-BBIO
+Those library and its dependency(Adafruit GPIO library) can be installed from PyPI by executing:
+```
+sudo pip3 install pi-ina219
+sudo pip3 install Adafruit-SSD1306
+sudo pip3 install Adafruit-BBIO
+```
+or you can download and install it by manual:
 * Download SSD1306 library:
 
 ```
@@ -43,11 +53,12 @@ cd Adafruit_Python_SSD1306
 sudo python setup.py install
 pip install Adafruit-BBIO
 ```
+### Demo Code Download
 * Download Demo Code:
 ``` 
 git clone https://github.com/geeekpi/RPiFEBP.git
 cd RPiFEBP/
-python oled.py & 
+python3 oled.py & 
 ```
 ## How to Setup LED indicator
 * Reinstall wiringPi library.
@@ -84,6 +95,7 @@ do
 done
 
 ```
+### Control LED on the bottom of expansion board by using RPi.GPIO library.
 * Demo code in Python:
 ```
 import RPi.GPIO as GPIO
@@ -111,3 +123,5 @@ except KeyboardInterrupt:
     GPIO.cleanup()
     print("BYE")
 ```
+### Have Fun
+

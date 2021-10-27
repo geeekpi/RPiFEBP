@@ -48,10 +48,10 @@ while True:
     cmd = "vcgencmd measure_temp"
     temp = subprocess.check_output(cmd, shell=True)
 
-    draw.text((x, top), "IP: "+ str(ip), font=font, fill=255)
-    draw.text((x, top+8), str(cpu), font=font, fill=255)
-    draw.text((x, top+16), str(mem), font=font, fill=255)
-    draw.text((x, top+25), str(temp), font=font, fill=255)
+    draw.text((x, top), "IP: {}".format(ip.decode('utf-8')), font=font, fill=255)
+    draw.text((x, top+8), "{}".format(cpu.decode('utf-8')), font=font, fill=255)
+    draw.text((x, top+16), "{}".format(mem.decode('utf-8')), font=font, fill=255)
+    draw.text((x, top+25), "{}".format(temp.decode('utf-8')), font=font, fill=255)
 
     oled.image(image)
     oled.display()
