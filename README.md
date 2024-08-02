@@ -1,6 +1,8 @@
 # RPiFEBP
 ## Revision
 * 2021-09-26:V1.0
+## Software update date 
+* 2024-08-02:V1.0 
 ## Descriptions
 RPiFEBP stands for Raspberry Pi Fan Expansion Board Plus.
 It is a fan expansion board with 0.91 OLED Display and 4007 PWM Fan onboard, 4 programable LED indicators under the PCB board.
@@ -14,9 +16,10 @@ It is a fan expansion board with 0.91 OLED Display and 4007 PWM Fan onboard, 4 p
 ## How to Setup Fan 
 * Recommend OS: Raspberry Pi OS (Buster) or later.
 * Requirements:
- - SSD1306 library for OLED 
+ - SSD1306 library for OLED - recommended using "luma.oled" library  
  - SMBUS library for I2C device control
- - wiringPi library for LED indicators control
+ - wiringPi library for LED indicators control(Deprecated)
+ - RPi.GPIO library for LED indicators control(Recommended) 
 * Open a terminal and typing:
 ```
 sudo raspi-config
@@ -35,93 +38,43 @@ i2cdetect -y 1
 ```
 It will shows an address: `0x3c`
 
-### Installation and Upgrade 
-* Adafruit_SSD1306 and Adafruit-BBIO
-Those library and its dependency(Adafruit GPIO library) can be installed from PyPI by executing:
-```
-sudo pip3 install pi-ina219
-sudo pip3 install Adafruit-SSD1306
-sudo pip3 install Adafruit-BBIO
-```
-or you can download and install it by manual:
-* Download SSD1306 library:
-
-```
-sudo python -m pip install --upgrade pip setuptools wheel
-git clone https://github.com/adafruit/Adafruit_Python_SSD1306.git
-cd Adafruit_Python_SSD1306
-sudo python setup.py install
-pip install Adafruit-BBIO
-```
-### Demo Code Download
-* Download Demo Code:
-``` 
-git clone https://github.com/geeekpi/RPiFEBP.git
-cd RPiFEBP/
-python3 oled.py & 
-```
-## How to Setup LED indicator
-* Reinstall wiringPi library.
-```
-sudo apt -y purge wiringpi
-hash -r 
-cd /tmp
-wget https://project-downloads.drogon.net/wiringpi-latest.deb
-sudo dpkg -i wiringpi-latest.deb
-gpio readall
-
-```
-* LED indicators Pin out
+### LED indicators Pin out
 There are 4 LED under the PCB board.
  - LED1 - nearby the GPIO pins and fan on left corner, connect to `GPIO 24` (BCM 19)
  - LED2 - under LED1, connect to `GPIO 23` (BCM 13)
  - LED3 - on the right of LED2, connect to `GPIO 22` (BCM 6) 
  - LED4 - on the top of LED3, connect to `GPIO 21` (BCM 5) 
-* Demo code in shell:
+
+### Installation 
+* Please refer to: [52Pi wiki](https://wiki.52pi.com/index.php?title=EP-0152)
+
+### Install by copy paste
+* Enable I2C 
+* Install dependencies libraries. 
+
+```bash
+sudo apt update 
+sudo apt upgrade -y
+sudo apt -y install python3 python3-dev python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 
+sudo pip install --upgrade luma.oled --break-system-packages
+sudo usermod -a -G gpio,i2c pi  
+git clone https://github.com/rm-hull/luma.examples.git 
+cd luma.examples/
+sudo -H pip install -e . --break-system-packages
+sudo -H pip installl psutil --break-system-packages 
 ```
-for i in `seq 21 24`
- do 
-    gpio mode $i out
- done 
-
-while true
-do 
-  for i in `seq 21 24`
-  do
-	gpio write $i 1 
-  	sleep 0.01
-  	gpio write $i 0
-  done
-done
-
+* clone the repository: 
+```bash
+cd ~
+git clone https://github.com/geeekpi/RPiFEBP.git
+cd RPiFEBP/
+sudo cp -Rvf systemd_files/*.service /etc/systemd/system/ 
+sudo systemctl daemon-reload
+sudo systemctl enable  52piFan.service
+sudo systemctl enable  lights.service
+sudo systemctl enable  oled.service
+sudo systemctl start 52piFan.service
+sudo systemctl start lights.service
+sudo systemctl start oled.service
 ```
-### Control LED on the bottom of expansion board by using RPi.GPIO library.
-* Demo code in Python:
-```
-import RPi.GPIO as GPIO
-import time 
-
-
-# BCM Number of LED indicators
-leds = [5, 6, 13, 19]
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-for i in range(len(leds)):
-    GPIO.setup(leds[i], GPIO.OUT)
-
-
-
-try:
-    while True:
-	for led in leds:
-       	    GPIO.output(led, GPIO.HIGH)
-	    time.sleep(0.01)
-            GPIO.output(led, GPIO.LOW)
-except KeyboardInterrupt:
-    GPIO.cleanup()
-    print("BYE")
-```
-### Have Fun
-
+* That's it,have fun! 

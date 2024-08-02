@@ -1,0 +1,11 @@
+[Unit]
+Description=52Pi Pi Fan Expansion board plus OLED display service v1.0
+After=multi-user.target
+
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/usr/bin/python3 /home/pi/luma-env/luma.examples/examples/system_infor.py --width 128 --height 32
+
+[Install]
+WantedBy=multi-user.target

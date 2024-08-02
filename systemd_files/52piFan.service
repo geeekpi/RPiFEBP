@@ -1,0 +1,11 @@
+[Unit]
+Description=52Pi Pi fan expansion board Fan control service v1.0
+After=multi-user.target
+
+[Service]
+Type=simple 
+RemainAfterExit=true
+ExecStart=/usr/bin/python3 /home/pi/fan_test/autofan.py 
+
+[Install]
+WantedBy=multi-user.target

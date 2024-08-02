@@ -1,0 +1,11 @@
+[Unit]
+Description=52Pi Raspberry Pi Fan Extansion board Plus 0.91 OLED v1.0
+After=multi-user.target
+
+[Service]
+Type=simple 
+RemainAfterExit=true
+ExecStart=/usr/bin/python3 /home/pi/led_blinking.py 
+
+[Install]
+WantedBy=multi-user.target
