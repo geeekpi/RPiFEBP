@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple 
 RemainAfterExit=true
-ExecStart=/usr/bin/python3 /home/pi/led_blinking.py 
+ExecStart=/usr/bin/python3 /home/pi/RPiFEBP/python_scripts/led_blinking.py 
 
 [Install]
 WantedBy=multi-user.target
