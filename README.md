@@ -68,13 +68,6 @@ sudo -H pip installl psutil --break-system-packages
 cd ~
 git clone https://github.com/geeekpi/RPiFEBP.git
 cd RPiFEBP/
-sudo cp -Rvf systemd_files/*.service /etc/systemd/system/ 
-sudo systemctl daemon-reload
-sudo systemctl enable  52piFan.service
-sudo systemctl enable  lights.service
-sudo systemctl enable  oled.service
-sudo systemctl start 52piFan.service
-sudo systemctl start lights.service
-sudo systemctl start oled.service
+./install.sh
 ```
 * That's it,have fun! 
